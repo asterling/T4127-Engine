@@ -1,0 +1,128 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "calculate_payroll_deductions",
+      "description": "Calculate Canadian payroll deductions (federal tax, provincial tax, CPP, CPP2, EI) for a single pay period using CRA T4127 formulas. Covers all provinces and territories except Quebec provincial tax. Returns per-period deduction amounts and annual breakdown. All monetary values in CAD.",
+      "parameters": {
+        "type": "object",
+        "required": ["gross_pay", "province", "pay_period"],
+        "properties": {
+          "gross_pay": {
+            "type": "number",
+            "description": "Gross remuneration for the pay period in CAD (e.g., 1000.00)"
+          },
+          "province": {
+            "type": "string",
+            "enum": ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "SK", "YT"],
+            "description": "Two-letter Canadian province/territory code"
+          },
+          "pay_period": {
+            "type": "integer",
+            "enum": [52, 26, 24, 12],
+            "description": "Number of pay periods per year. 52=weekly, 26=biweekly, 24=semi-monthly, 12=monthly"
+          },
+          "federal_claim_code": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 1,
+            "description": "Federal TD1 claim code (0=no personal credits, 1=basic personal amount $16,452, 2-10=higher claim amounts)"
+          },
+          "provincial_claim_code": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 1,
+            "description": "Provincial TD1 claim code (0=no personal credits, 1=basic personal amount)"
+          },
+          "bonus": {
+            "type": "number",
+            "default": 0,
+            "description": "Bonus or retroactive pay included this period. Triggers the T4127 differential tax method (TB formula)."
+          },
+          "rpp_contributions": {
+            "type": "number",
+            "default": 0,
+            "description": "Registered Pension Plan or RRSP contributions deducted per pay period"
+          },
+          "union_dues": {
+            "type": "number",
+            "default": 0,
+            "description": "Union dues deducted per pay period"
+          },
+          "prescribed_zone": {
+            "type": "number",
+            "default": 0,
+            "description": "Annual prescribed northern zone deduction (for employees in designated remote areas)"
+          },
+          "annual_deductions": {
+            "type": "number",
+            "default": 0,
+            "description": "Other annual deductions authorized by CRA (child care expenses, support payments, etc.)"
+          },
+          "additional_tax": {
+            "type": "number",
+            "default": 0,
+            "description": "Additional tax to deduct per period as requested by employee on TD1 form"
+          },
+          "ytd_cpp": {
+            "type": "number",
+            "default": 0,
+            "description": "Year-to-date CPP contributions already deducted. Used to calculate remaining CPP owing (annual max $4,230.45 for 2026)."
+          },
+          "ytd_cpp2": {
+            "type": "number",
+            "default": 0,
+            "description": "Year-to-date CPP2 (second additional) contributions already deducted (annual max $416 for 2026)"
+          },
+          "ytd_ei": {
+            "type": "number",
+            "default": 0,
+            "description": "Year-to-date EI premiums already deducted. Used to calculate remaining EI owing (annual max $1,123.07 for 2026)."
+          },
+          "ytd_pensionable": {
+            "type": "number",
+            "default": 0,
+            "description": "Year-to-date pensionable earnings. Used for CPP2 second ceiling calculations."
+          },
+          "pensionable_earnings": {
+            "type": ["number", "null"],
+            "default": null,
+            "description": "Pensionable earnings for this period. Defaults to gross_pay if not specified."
+          },
+          "insurable_earnings": {
+            "type": ["number", "null"],
+            "default": null,
+            "description": "Insurable earnings for this period. Defaults to gross_pay if not specified."
+          },
+          "dependants_for_reduction": {
+            "type": "number",
+            "default": 0,
+            "description": "Ontario only: dependant amount for Ontario tax reduction calculation"
+          },
+          "cpp_months": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "default": 12,
+            "description": "Number of months CPP contributions are required (less than 12 for employees turning 18 or 70 mid-year)"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "list_provinces",
+      "description": "List the Canadian provinces and territories supported by the payroll deductions calculator. Quebec is excluded because it administers its own provincial tax through Revenu Québec.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    }
+  }
+]

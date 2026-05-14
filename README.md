@@ -253,6 +253,72 @@ curl -o federal_weekly.csv http://localhost:8000/t4032/ON/52/federal.csv
 curl -o provincial_biweekly.csv http://localhost:8000/t4032/ON/26/provincial.csv
 ```
 
+## AI Agent Integration
+
+T4127 Engine can be used as a tool by AI agents — give any LLM the ability to calculate Canadian payroll deductions.
+
+### MCP Server (Claude Desktop, VS Code, Cursor)
+
+Install with MCP support:
+
+```bash
+pip install t4127-engine[mcp]
+t4127 download  # fetch CRA rate data
+```
+
+Add to your Claude Desktop config (`claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "payroll-calculator": {
+      "command": "t4127-mcp"
+    }
+  }
+}
+```
+
+Or run directly:
+
+```bash
+python -m payroll_calc.mcp_server
+```
+
+The server exposes two tools:
+- **`calculate_payroll_deductions`** — full T4127 calculation with all optional parameters
+- **`list_provinces`** — list supported provinces and territories
+
+### OpenAI / Anthropic Function Calling
+
+A ready-to-use tool schema is included at `payroll_calc/schemas/openai_tool.json`:
+
+```python
+import json
+from pathlib import Path
+
+# Load the schema
+schema_path = Path("payroll_calc/schemas/openai_tool.json")
+tools = json.loads(schema_path.read_text())
+
+# Use with OpenAI
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[{"role": "user", "content": "What are the deductions on $5,000 biweekly in Alberta?"}],
+    tools=tools,
+)
+
+# Use with Anthropic
+response = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    messages=[{"role": "user", "content": "What are the deductions on $5,000 biweekly in Alberta?"}],
+    tools=[{"name": t["function"]["name"],
+            "description": t["function"]["description"],
+            "input_schema": t["function"]["parameters"]} for t in tools],
+)
+```
+
+The schema defines the same parameters as the MCP server and CLI — you handle the actual function execution and return the result to the LLM.
+
 ## Supported Provinces & Pay Periods
 
 **Provinces/territories:** AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, SK, YT

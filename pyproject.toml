@@ -32,11 +32,15 @@ dependencies = [
 
 [project.scripts]
 t4127 = "payroll_calc.__main__:main"
+t4127-mcp = "payroll_calc.mcp_server:main"
 
 [project.optional-dependencies]
 api = [
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
+]
+mcp = [
+    "mcp>=1.0.0",
 ]
 pdoc = [
     "selenium>=4.0.0",
@@ -55,3 +59,6 @@ Issues = "https://github.com/asterling/T4127-Engine/issues"
 [tool.setuptools.packages.find]
 include = ["payroll_calc*"]
 exclude = ["payroll_calc.cra_data*"]
+
+[tool.setuptools.package-data]
+payroll_calc = ["schemas/*.json"]
