@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "payroll-calc"
+version = "0.1.0"
+description = "Canadian payroll deductions calculator — CRA T4127 formulas for all provinces and territories"
+readme = "README.md"
+license = "AGPL-3.0-or-later"
+requires-python = ">=3.10"
+authors = [
+    { name = "Adam Sterling" },
+]
+keywords = ["payroll", "canada", "cra", "cpp", "ei", "tax", "deductions", "t4127"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Accounting",
+]
+dependencies = [
+    "pyyaml>=6.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/asterling/T4127-Engine"
+Issues = "https://github.com/asterling/T4127-Engine/issues"
+
+[tool.setuptools.packages.find]
+include = ["payroll_calc*"]

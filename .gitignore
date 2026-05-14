@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CRA data (downloaded, not source — run download_cra.py to fetch)
+payroll_calc/cra_data/
+
+# Test artifacts
+.pytest_cache/
+htmlcov/
+.coverage
+
+# PDF reference data (generated, large)
+payroll_calc/tests/reference_data/
+
+# Internal TODO
+TODO.md
