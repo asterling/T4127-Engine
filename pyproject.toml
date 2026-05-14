@@ -30,6 +30,9 @@ dependencies = [
     "requests>=2.28.0",
 ]
 
+[project.scripts]
+t4127 = "payroll_calc.__main__:main"
+
 [project.optional-dependencies]
 api = [
     "fastapi>=0.115.0",

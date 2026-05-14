@@ -1,5 +1,6 @@
 # T4127 Engine
 
+[![PyPI](https://img.shields.io/pypi/v/t4127-engine.svg)](https://pypi.org/project/t4127-engine/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Tests: 92,035 passing](https://img.shields.io/badge/tests-92%2C035_passing-brightgreen.svg)](#accuracy--testing)
@@ -71,19 +72,28 @@ Part of the [Canada Pay Freedom](https://github.com/asterling) project. Licensed
 
 ## Installation
 
+### From PyPI
+
+```bash
+pip install t4127-engine
+```
+
+Then download the CRA's published rate data (21 CSV files fetched directly from canada.ca — not bundled in the package due to Crown copyright):
+
+```bash
+python -m payroll_calc.download_cra
+```
+
+### From source
+
 ```bash
 git clone https://github.com/asterling/T4127-Engine.git
 cd T4127-Engine
-pip install pydantic pyyaml
+pip install -e ".[dev]"
+python -m payroll_calc.download_cra
 ```
 
-Download the CRA's published rate data (21 CSV files fetched directly from canada.ca):
-
-```bash
-python payroll_calc/download_cra.py
-```
-
-Verify everything works:
+### Verify
 
 ```bash
 python -m pytest payroll_calc/tests/test_regression.py -v
@@ -92,6 +102,37 @@ python -m pytest payroll_calc/tests/test_regression.py -v
 That's it. 43 tests, all passing in under a second.
 
 ## Usage
+
+### From the command line
+
+```bash
+# Basic calculation
+t4127 calculate --gross 1000 --province ON --period 52
+
+# Output:
+#   Gross pay:        $    1,000.00
+#   Province:          ON (52pp, CC1/1)
+#
+#   Federal tax:      $       81.61
+#   Provincial tax:   $       45.80
+#   CPP:              $       55.50
+#   EI:               $       16.30
+#                     ─────────────
+#   Total deductions: $      199.21
+#   Net pay:          $      800.79
+
+# With deductions
+t4127 calculate --gross 3200 --province MB --period 26 --rpp 80 --union-dues 25
+
+# JSON output (for piping to other tools)
+t4127 calculate --gross 1000 --province ON --period 52 --json
+
+# Download CRA data
+t4127 download
+
+# Compare against CRA's PDOC (requires Selenium + Chrome)
+t4127 compare 1000 ON 52
+```
 
 ### As a Python library
 
