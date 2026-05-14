@@ -1,5 +1,11 @@
 # T4127 Engine
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Tests: 92,035 passing](https://img.shields.io/badge/tests-92%2C035_passing-brightgreen.svg)](#accuracy--testing)
+[![PDOC Validated](https://img.shields.io/badge/CRA_PDOC-penny--for--penny_match-brightgreen.svg)](#validate-against-the-cras-pdoc)
+[![Tax Year: 2026](https://img.shields.io/badge/tax_year-2026-orange.svg)](#what-the-cra-actually-publishes)
+
 **Open-source Canadian payroll deductions calculator.** Implements the CRA's T4127 formulas for all provinces and territories. Validated against 92,000+ test cases and penny-for-penny against the CRA's own PDOC calculator.
 
 ```
@@ -53,6 +59,15 @@ You have to wonder who benefits from this. It's certainly not small businesses a
 **T4127 Engine exists to change this.** If the CRA won't publish a reference implementation, the community can.
 
 Part of the [Canada Pay Freedom](https://github.com/asterling) project. Licensed under [AGPL-3.0](LICENSE).
+
+### Who is this for?
+
+- **Payroll software developers** who need a correct, auditable calculation engine they can integrate into their product
+- **HRIS and HR tech builders** who need a Canadian tax module without licensing a proprietary one
+- **Accountants and bookkeepers** who want to verify their software's output against a transparent, testable implementation
+- **Small business owners** who are tired of paying per-employee-per-month for what is fundamentally public arithmetic
+- **Open-source projects** that need Canadian payroll support without reinventing the T4127 from scratch
+- **Anyone** who believes tax calculation logic should be public infrastructure, not a proprietary black box
 
 ## Installation
 
@@ -206,6 +221,16 @@ curl -o provincial_biweekly.csv http://localhost:8000/t4032/ON/26/provincial.csv
 **Claim codes:** 0-10 (federal and provincial)
 
 **Not yet supported:** Quebec provincial tax. Quebec administers its own provincial income tax through Revenu Québec using separate formulas (TP-1015.3), a separate pension plan (QPP instead of CPP), and a separate parental insurance plan (QPIP). Federal tax for Quebec employees *is* calculated (with the 16.5% abatement), but provincial deductions require a dedicated Revenu Québec implementation — this is on the roadmap.
+
+## Roadmap
+
+- **Quebec provincial tax** — Revenu Québec TP-1015.3 formulas, QPP, QPIP (the data is already downloaded, the formulas need implementing)
+- **PyPI package** — `pip install t4127-engine` for easy integration
+- **Annual rate updates** — automated workflow to pull new T4127 data when the CRA publishes each November
+- **CPP/QPP edge cases** — employees turning 18 or 70 mid-year, multi-jurisdiction workers
+- **GitHub Actions CI** — automated test runs on every push
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) if you want to help with any of these.
 
 ---
 

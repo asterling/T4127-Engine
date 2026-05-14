@@ -3,33 +3,52 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "payroll-calc"
+name = "t4127-engine"
 version = "0.1.0"
-description = "Canadian payroll deductions calculator — CRA T4127 formulas for all provinces and territories"
+description = "Open-source Canadian payroll deductions calculator — CRA T4127 formulas for all provinces and territories"
 readme = "README.md"
 license = "AGPL-3.0-or-later"
 requires-python = ">=3.10"
 authors = [
     { name = "Adam Sterling" },
 ]
-keywords = ["payroll", "canada", "cra", "cpp", "ei", "tax", "deductions", "t4127"]
+keywords = ["payroll", "canada", "cra", "cpp", "ei", "tax", "deductions", "t4127", "t4032", "payroll-deductions"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Intended Audience :: Financial and Insurance Industry",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Office/Business :: Financial :: Accounting",
 ]
 dependencies = [
+    "pydantic>=2.0.0",
     "pyyaml>=6.0.0",
+    "requests>=2.28.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+]
+pdoc = [
+    "selenium>=4.0.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "requests>=2.28.0",
+    "beautifulsoup4>=4.12.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/asterling/T4127-Engine"
+Repository = "https://github.com/asterling/T4127-Engine"
 Issues = "https://github.com/asterling/T4127-Engine/issues"
 
 [tool.setuptools.packages.find]
 include = ["payroll_calc*"]
+exclude = ["payroll_calc.cra_data*"]
